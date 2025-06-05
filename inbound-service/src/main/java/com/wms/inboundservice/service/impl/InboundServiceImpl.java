@@ -1,0 +1,60 @@
+package com.wms.inboundservice.service.impl;
+
+import com.wms.inboundservice.contant.InboundStatus;
+import com.wms.inboundservice.dao.InboundDao;
+import com.wms.inboundservice.dto.InboundRecordDto;
+import com.wms.inboundservice.dto.InboundRecordQuery;
+import com.wms.inboundservice.model.InboundRecord;
+import com.wms.inboundservice.service.InboundService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class InboundServiceImpl implements InboundService {
+    @Autowired
+    private InboundDao inboundDao;
+
+
+    @Override
+    public InboundRecord createInboundRecord(InboundRecordDto dto) {
+        InboundRecord record = new InboundRecord();
+        record.setProductCode(dto.getProductCode());
+        record.setProductName(dto.getProductName());
+        record.setInboundStatus(InboundStatus.PENDING);
+        record.setQuantity(dto.getQuantity());
+        record.setSupplier(dto.getSupplier());
+        record.setRemark(dto.getRemark());
+        record.setLocationCode(dto.getLocationCode());
+        record.setCreatedBy(dto.getCreatedBy());
+
+        record = inboundDao.save(record);
+        return record;
+    }
+
+    @Override
+    public InboundRecord getInboundRecordById(Long recordId) {
+        return null;
+    }
+
+    @Override
+    public List<InboundRecord> getAllInboundRecords() {
+        return null;
+    }
+
+    @Override
+    public InboundRecord updateInboundStatus(Long recordId, InboundStatus newStatus) {
+        return null;
+    }
+
+    @Override
+    public List<InboundRecord> searchInboundRecords(InboundRecordQuery query) {
+        return null;
+    }
+
+    @Override
+    public void deleteInboundRecord(Long recordId) {
+
+    }
+}
