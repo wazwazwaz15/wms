@@ -1,10 +1,12 @@
 package com.wms.inboundservice.dto;
 
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class InboundRecordDto {
+    @Schema(description = "商品代碼", example = "116610LV", defaultValue = "000000")
     @NotBlank
     private String productCode;
     @NotBlank

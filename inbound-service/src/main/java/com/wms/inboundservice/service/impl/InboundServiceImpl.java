@@ -6,6 +6,7 @@ import com.wms.inboundservice.dto.InboundRecordDto;
 import com.wms.inboundservice.dto.InboundRecordQuery;
 import com.wms.inboundservice.model.InboundRecord;
 import com.wms.inboundservice.service.InboundService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -48,16 +49,24 @@ public class InboundServiceImpl implements InboundService {
     @Override
     public List<InboundRecord> getAllInboundRecords() {
         List<InboundRecord> inboundRecordList = inboundDao.findAll();
-        if (inboundRecordList.size() == 0) {
+        if (inboundRecordList.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "目前沒有任何的入庫紀錄");
         }
 
         return inboundRecordList;
     }
 
+    @Transactional
     @Override
     public InboundRecord updateInboundStatus(Long recordId, InboundStatus newStatus) {
-        return null;
+
+        InboundRecord inboundRecord = inboundDao.findById(recordId).orElseThrow();
+        inboundRecord.setInboundStatus(newStatus);
+        inboundDao.save(inboundRecord);
+        inboundRecord = inboundDao.findById(recordId).orElseThrow();
+
+
+        return inboundRecord;
     }
 
     @Override

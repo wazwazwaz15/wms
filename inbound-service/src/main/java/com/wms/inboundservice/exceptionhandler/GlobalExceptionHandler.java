@@ -15,7 +15,6 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<Map<String, Object>> handleNoRecordsException(ResponseStatusException ex, HttpServletRequest request) {
         Map<String, Object> body = new HashMap<>();
