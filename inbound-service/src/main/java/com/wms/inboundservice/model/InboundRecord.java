@@ -26,8 +26,10 @@ public class InboundRecord {
 
     private String createdBy;
 
+    @Schema(hidden = true)
     @Column(name = "received_at" ,insertable = false)
     private Timestamp receivedAt;
+    @Schema(hidden = true)
     @Column(name = "updated_at" ,insertable = false)
     private Timestamp updatedAt;
 

@@ -5,14 +5,18 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+@Schema(description = "創建資料表")
 public class InboundRecordDto {
-    @Schema(description = "商品代碼", example = "116610LV", defaultValue = "000000")
+    @Schema(description = "商品代碼", example = "116610LV")
     @NotBlank
     private String productCode;
+    @Schema(description = "商品名稱", example = "ROLEX")
     @NotBlank
     private String productName;
+    @Schema(description = "數量",example = "50")
     @NotNull
     private Integer quantity;
+    @Schema(description = "供應商",example = "COSTCO")
     @NotBlank
     private String supplier;
     @NotBlank

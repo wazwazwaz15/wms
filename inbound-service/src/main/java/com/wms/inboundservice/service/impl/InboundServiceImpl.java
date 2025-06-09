@@ -6,8 +6,10 @@ import com.wms.inboundservice.dto.InboundRecordDto;
 import com.wms.inboundservice.dto.InboundRecordQuery;
 import com.wms.inboundservice.model.InboundRecord;
 import com.wms.inboundservice.service.InboundService;
+import com.wms.inboundservice.util.InboundRecordSpecification;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -21,6 +23,7 @@ public class InboundServiceImpl implements InboundService {
 
 
     @Override
+    @Transactional
     public InboundRecord createInboundRecord(InboundRecordDto dto) {
         InboundRecord record = new InboundRecord();
         record.setProductCode(dto.getProductCode());
@@ -71,11 +74,19 @@ public class InboundServiceImpl implements InboundService {
 
     @Override
     public List<InboundRecord> searchInboundRecords(InboundRecordQuery query) {
-        return null;
+        Specification<InboundRecord> spec = InboundRecordSpecification.build(query);
+        List<InboundRecord> inboundRecordList = inboundDao.findAll(spec);
+
+        if (inboundRecordList.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "找尋不到相關條件的資料");
+        }
+
+        return inboundRecordList;
     }
 
     @Override
+    @Transactional
     public void deleteInboundRecord(Long recordId) {
-
+        inboundDao.deleteByRecordId(recordId);
     }
 }

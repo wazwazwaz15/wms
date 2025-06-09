@@ -2,9 +2,9 @@ package com.wms.inboundservice.controller;
 
 import com.wms.inboundservice.contant.InboundStatus;
 import com.wms.inboundservice.dto.InboundRecordDto;
+import com.wms.inboundservice.dto.InboundRecordQuery;
 import com.wms.inboundservice.model.InboundRecord;
 import com.wms.inboundservice.service.InboundService;
-import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -18,6 +18,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.List;
 
 @RestController
@@ -81,6 +83,33 @@ public class InboundController {
     }
 
 
+    @GetMapping("/readByQuery")
+    @Operation(summary = "查詢入庫紀錄",
+            description = "根據條件查詢入庫紀錄列表",
+            parameters = {@Parameter(name = "product_code", description = "產品碼"),
+                    @Parameter(name = "inbound_status", description = "產品入庫狀態"),
+                    @Parameter(name = "supplier", description = "供應商"),
+                    @Parameter(name = "start_date", description = "起始日"),
+                    @Parameter(name = "end_date", description = "截止日")
+
+            })
+    public ResponseEntity<List<InboundRecord>> getInboundRecordByConstraint(@RequestParam(name = "product_code", required = false) String productCode,
+                                                                            @RequestParam(name = "inbound_status", required = false) InboundStatus inboundStatus,
+                                                                            @RequestParam(name = "supplier", required = false) String supplier,
+                                                                            @RequestParam(name = "start_date", required = false) Timestamp startDate,
+                                                                            @RequestParam(name = "end_date", required = false) Timestamp endDate
+    ) {
+        InboundRecordQuery inboundRecordQuery = new InboundRecordQuery();
+        inboundRecordQuery.setProductCode(productCode);
+        inboundRecordQuery.setInboundStatus(inboundStatus);
+        inboundRecordQuery.setSupplier(supplier);
+        inboundRecordQuery.setStartDate(startDate);
+        inboundRecordQuery.setEndDate(endDate);
+        List<InboundRecord> recordList = inboundService.searchInboundRecords(inboundRecordQuery);
+        return ResponseEntity.status(HttpStatus.OK).body(recordList);
+    }
+
+
     @GetMapping("/update/{recordId}")
     @Parameter(name = "recordId", required = true, description = "紀錄ID")
     @Operation(summary = "更新入庫狀態")
@@ -92,6 +121,17 @@ public class InboundController {
     public ResponseEntity<InboundRecord> updateStatus(@PathVariable Long recordId, @RequestParam(required = true) InboundStatus inboundStatus) {
         InboundRecord record = inboundService.updateInboundStatus(recordId, inboundStatus);
         return ResponseEntity.status(HttpStatus.OK).body(record);
+    }
+
+
+    @GetMapping("/delete/{recordId}")
+    @Operation(summary = "刪除入庫紀錄", description = "透過記錄ID來刪除", parameters = {@Parameter(name = "recordId")})
+    @ApiResponses({@ApiResponse(responseCode = "204",description = "成功刪除")})
+    public ResponseEntity<?> deleteInboundRecord(@PathVariable Long recordId) {
+        inboundService.deleteInboundRecord(recordId);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+
     }
 
 
