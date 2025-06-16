@@ -12,7 +12,7 @@ import java.util.List;
 
 public class InboundRecordSpecification {
 
-    public static Specification<InboundRecord> build(InboundRecordQuery query) {
+    public static Specification<InboundRecord> buildSelectQueryByConstraints(InboundRecordQuery query) {
         return ((root, query1, criteriaBuilder) -> {
             List<Predicate> predicateList = new ArrayList<>();
 

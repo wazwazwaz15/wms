@@ -74,7 +74,7 @@ public class InboundServiceImpl implements InboundService {
 
     @Override
     public List<InboundRecord> searchInboundRecords(InboundRecordQuery query) {
-        Specification<InboundRecord> spec = InboundRecordSpecification.build(query);
+        Specification<InboundRecord> spec = InboundRecordSpecification.buildSelectQueryByConstraints(query);
         List<InboundRecord> inboundRecordList = inboundDao.findAll(spec);
 
         if (inboundRecordList.isEmpty()) {

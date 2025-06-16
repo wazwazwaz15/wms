@@ -110,7 +110,7 @@ public class InboundController {
     }
 
 
-    @GetMapping("/update/{recordId}")
+    @PutMapping("/update/{recordId}")
     @Parameter(name = "recordId", required = true, description = "紀錄ID")
     @Operation(summary = "更新入庫狀態")
     @ApiResponses({
@@ -124,7 +124,7 @@ public class InboundController {
     }
 
 
-    @GetMapping("/delete/{recordId}")
+    @DeleteMapping("/delete/{recordId}")
     @Operation(summary = "刪除入庫紀錄", description = "透過記錄ID來刪除", parameters = {@Parameter(name = "recordId")})
     @ApiResponses({@ApiResponse(responseCode = "204",description = "成功刪除")})
     public ResponseEntity<?> deleteInboundRecord(@PathVariable Long recordId) {
